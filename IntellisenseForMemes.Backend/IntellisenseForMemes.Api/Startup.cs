@@ -34,6 +34,15 @@ namespace IntellisenseForMemes.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
+
             _container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
             services.EnableSimpleInjectorCrossWiring(_container);
 
@@ -92,6 +101,8 @@ namespace IntellisenseForMemes.Api
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseCors("CorsPolicy");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

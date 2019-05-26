@@ -1,13 +1,16 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using IntellisenseForMemes.Api.AppHelpers;
 using IntellisenseForMemes.BusinessLogic.Services.Meme;
 using IntellisenseForMemes.BusinessLogic.Services.Meme.Models;
 using IntellisenseForMemes.BusinessLogic.Services.User;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IntellisenseForMemes.Api.Controllers
 {
     [ApiController]
+    [EnableCors("CorsPolicy")]
     public class MemeController : ControllerBase
     {
         private readonly IUserService _userService;
