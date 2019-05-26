@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+    <UserSecretsId>59b0ef4f-3739-46dd-87c5-b00c001a4a8f</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.0.2105168" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
+    <PackageReference Include="NLog" Version="4.6.3" />
+    <PackageReference Include="SimpleInjector.Integration.AspNetCore" Version="4.4.3" />
+    <PackageReference Include="SimpleInjector.Integration.AspNetCore.Mvc" Version="4.4.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IntellisenseForMemes.BusinessLogic\IntellisenseForMemes.BusinessLogic.csproj" />
+    <ProjectReference Include="..\IntellisenseForMemes.Common\IntellisenseForMemes.Common.csproj" />
+    <ProjectReference Include="..\IntellisenseForMemes.DAL\IntellisenseForMemes.DAL.csproj" />
+    <ProjectReference Include="..\IntellisenseForMemes.Domain\IntellisenseForMemes.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
