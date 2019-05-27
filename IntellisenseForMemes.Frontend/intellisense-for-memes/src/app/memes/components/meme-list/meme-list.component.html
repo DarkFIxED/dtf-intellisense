@@ -1,5 +1,22 @@
-<ul>
-  <li *ngFor="let user of memes">
-    {{user.name}}
-  </li>
-</ul>
+<h1 class="center"> Memes list </h1>
+
+<p-dataView [value]="memes" [paginator]="true" [rows]="10">
+
+  <ng-template let-meme pTemplate="listItem">
+    <div class="ui-g separator">
+      <div class="ui-g-12 ui-md-3">
+        <div class="ui-g-12 ui-md-8 center" [innerHtml]="meme.embededLink"></div>
+      </div>
+      <div class="ui-g-12 ui-md-8">
+        <div class="ui-g center">
+          <h2 class="ui-g-12 ui-md-3 title name-label">
+            {{meme.name}}
+          </h2>
+        </div>
+      </div>
+      <div class="ui-g-12 ui-md-1 icon">
+        <span class="mdi mdi-pencil mdi-36px"></span>
+      </div>
+    </div>
+  </ng-template>
+</p-dataView>
