@@ -26,7 +26,7 @@ namespace IntellisenseForMemes.Api.Controllers
 
         [HttpGet]
         [Route("memes/search")]
-        public async Task<IActionResult> GetMemes(string option)
+        public async Task<IActionResult> SearchMemes(string option = null)
         {
             var memes = await _memeService.SearchMemes(option);
 

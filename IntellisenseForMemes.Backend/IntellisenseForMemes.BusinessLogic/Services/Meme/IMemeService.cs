@@ -10,6 +10,6 @@ namespace IntellisenseForMemes.BusinessLogic.Services.Meme
         Task<MemeModel> GetMeme(int memeId);
         Task<int> CreateMeme(Domain.User creator, MemeModel meme);
         Task UpdateMeme(Domain.User modifier, MemeModel meme);
-        Task<List<string>> SearchMemes(string option);
+        Task<List<MemeBriefModel>> SearchMemes(string option);
     }
 }

@@ -21,12 +21,15 @@ namespace IntellisenseForMemes.BusinessLogic.Services.Meme
             _dtfSender = dtfSender;
         }
 
-        public async Task<List<string>> SearchMemes(string option)
+        public async Task<List<MemeBriefModel>> SearchMemes(string option)
         {
             var memes = await _memeRepository.AsQueryable()
                 .Include(m => m.Aliases)
-                .Where(m => m.Name.Contains(option) || m.Aliases.Any(a => a.Alias.Contains(option)))
-                .Select(m => m.Name)
+                .Where(m => string.IsNullOrWhiteSpace(option) || m.Name.Contains(option) || m.Aliases.Any(a => a.Alias.Contains(option)))
+                .Select(m => new MemeBriefModel{
+                    DisplayingName = m.Name,
+                    Aliases = m.Aliases.Select(a => a.Alias).ToList()
+                })
                 .ToListAsync();
 
             return memes;
