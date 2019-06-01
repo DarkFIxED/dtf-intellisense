@@ -54,7 +54,7 @@ function buildContent(options) {
 }
 
 function findMatches(vocabulary, currentValue) {
-    let words = currentValue.split();
+    let words = currentValue.split(" ");
     let matches = [];
     let lastWord = words[words.length - 1];
 
@@ -134,6 +134,22 @@ function selectNextMatch() {
     $(memeListSelector).val(newValue);
 }
 
+function insertCurrent(target) {
+    let currentValue = `\${${$(memeListSelector).val()}}`;
+    let targetValue = $(target).val();
+
+    let words = targetValue.split(" ");
+    if (words.length === 0) {
+        $(target).val(currentValue);
+        return;
+    }
+
+    let lastWord = words[words.length - 1];
+    let lastEntryPointIndex = targetValue.lastIndexOf(lastWord);
+    let newValue = targetValue.substr(0, lastEntryPointIndex).concat(currentValue);
+    $(target).val(newValue);
+}
+
 function processCommandKey(target, keyboardEvent) {
 
     // Esc code
@@ -151,16 +167,23 @@ function processCommandKey(target, keyboardEvent) {
     }
 
     if (target['meme'].opened) {
-        // Arrows up and down
-        if (keyboardEvent.keyCode === 38) {
-            selectPrevMatch();
-            return false;
-        }
+        switch (keyboardEvent.keyCode) {
 
-        // Arrows up and down
-        if (keyboardEvent.keyCode === 40) {
-            selectNextMatch();
-            return false;
+            // arrow up
+            case 38:
+                selectPrevMatch();
+                return false;
+
+            // arrow down
+            case 40:
+                selectNextMatch();
+                return false;
+
+            // enter
+            case 13:
+                insertCurrent(target);
+                closeToolTip(target);
+                return false;
         }
     }
 
@@ -193,10 +216,24 @@ function initInputListener(e) {
 
 function openToolTip(target) {
     $(target).tooltipster('open');
+
+    $(memeListSelector).bind("keydown", function (event) {
+        if (event.originalEvent.keyCode === 13) {
+            insertCurrent(target);
+            closeToolTip(target);
+        }
+    });
+
+    $(memeListSelector).bind("dblclick", function (event) {
+        insertCurrent(target);
+        closeToolTip(target);
+    });
+
     target['meme'].opened = true;
 }
 
 function closeToolTip(target) {
+    $(memeListSelector).unbind();
     $(target).tooltipster('close');
     target['meme'].opened = false;
 }
