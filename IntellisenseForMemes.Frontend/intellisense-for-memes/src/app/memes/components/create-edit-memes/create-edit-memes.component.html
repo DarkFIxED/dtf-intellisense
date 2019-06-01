@@ -1,0 +1,19 @@
+<form [formGroup]="form" style="max-height: 600px">
+  <div class="ui-float-label first-input controls">
+    <input id="name" type="text" size="100" pInputText [formControl]="form.name">
+    <label class="red-line" for="name">Meme name</label>
+  </div>
+  <p-chips [max]="50" [styleClass]="'controls'" [placeholder]="'Aliases'" [formControl]="form.aliases">
+    <ng-template let-item pTemplate="item">
+      {{ item.alias ? item.alias : item }}
+    </ng-template>
+  </p-chips>
+  <div class="controls types">
+    <p-radioButton name="attachmentTypes" label="{{AttachmentTypes[AttachmentTypes.Image]}}" value="{{AttachmentTypes.Image}}" [formControl]="form.attachmentType"></p-radioButton>
+    <p-radioButton name="attachmentTypes" label="{{AttachmentTypes[AttachmentTypes.Video]}}" value="{{AttachmentTypes.Video}}" [formControl]="form.attachmentType"></p-radioButton>
+  </div>
+  <div class="ui-float-label controls">
+    <input id="attachment" type="text" pInputText [formControl]="form.attachments">
+    <label class="red-line" for="attachment">Attachment link</label>
+  </div>
+</form>

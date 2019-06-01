@@ -4,7 +4,7 @@ namespace IntellisenseForMemes.BusinessLogic.Services.Meme.Models
 {
     public class MemeModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         public string Name { get; set; }
 

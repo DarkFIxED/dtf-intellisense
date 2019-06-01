@@ -1,8 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {MemesHttpService} from '../../services/memes-http.service';
 import {Meme} from '../../models/meme.model';
 import {EmbedVideoService} from 'ngx-embed-video/dist';
 import {AttachmentTypes} from '../../models/attachment-types.enum';
+import {CreateEditMemesComponent} from '../create-edit-memes/create-edit-memes.component';
+import {DialogMods} from '../../../models/dialog-mods.enum';
 
 @Component({
   selector: 'app-meme-list',
@@ -12,11 +14,48 @@ import {AttachmentTypes} from '../../models/attachment-types.enum';
 export class MemeListComponent implements OnInit {
 
   memes: Meme[];
+  selectedMeme: Meme;
+  display = false;
+  selectedDialogMode: DialogMods;
+
+  @ViewChild(CreateEditMemesComponent) dialogView;
 
   constructor(public memeService: MemesHttpService, private embedService: EmbedVideoService) {
   }
 
   ngOnInit() {
+    this.initMemes();
+  }
+
+  showCreateDialog() {
+    this.selectedDialogMode = DialogMods.Create;
+    this.selectedMeme = undefined;
+    this.display = true;
+  }
+
+  showEditDialog(meme: Meme) {
+    this.selectedDialogMode = DialogMods.Edit;
+    this.selectedMeme = meme;
+    this.display = true;
+  }
+
+  onSuccess() {
+    this.initMemes();
+    this.closeDialog();
+  }
+
+  closeDialog() {
+    this.display = false;
+  }
+
+  submitForm() {
+    const success = this.dialogView.submit();
+    if (success) {
+      this.closeDialog();
+    }
+  }
+
+  private initMemes() {
     this.memeService.getMemes().subscribe(memes => {
       this.memes = memes;
       this.memes.forEach(m => {
@@ -24,13 +63,11 @@ export class MemeListComponent implements OnInit {
         const attachment = m.attachments || m.attachments.length > 0 ? m.attachments[0] : undefined;
         switch (attachment.type) {
           case AttachmentTypes.Image:
-            m.embededLink = this.embedService.embed_image(attachment.url, {
-              attr: { width: 480, height: 360 }
-            });
+            m.embededLink = `<img src="${attachment.url}" class="meme-image">`;
             break;
           case AttachmentTypes.Video:
             m.embededLink = this.embedService.embed(attachment.url, {
-              attr: { width: 360, height: 240 }
+              attr: {width: 360, height: 240}
             });
             break;
         }

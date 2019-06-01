@@ -62,7 +62,7 @@ namespace IntellisenseForMemes.Domain
             var attachmentIds = attachments.Select(a => a.Id);
             var existAttachmentIds = Attachments.Select(a => a.Id);
             var toAdd = attachments.Where(a => !existAttachmentIds.Contains(a.Id));
-            var toRemove = Attachments.Where(a => !attachmentIds.Contains(a.Id));
+            var toRemove = Attachments.Where(a => !attachmentIds.Contains(a.Id)).ToList();
 
             foreach (var removingAttachment in toRemove)
             {

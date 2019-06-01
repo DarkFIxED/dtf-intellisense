@@ -44,6 +44,7 @@ namespace IntellisenseForMemes.Api
             });
 
             _container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
+
             services.EnableSimpleInjectorCrossWiring(_container);
 
             services.AddSingleton<IControllerActivator>(new SimpleInjectorControllerActivator(_container));

@@ -1,11 +1,15 @@
 <h1 class="center"> Memes list </h1>
 
 <p-dataView [value]="memes" [paginator]="true" [rows]="10">
-
+  <p-header>
+    <div style="display: flex; justify-content: flex-end;">
+      <button pButton type="button" label="Create new meme" class="ui-button-success" (click)="showCreateDialog()"></button>
+    </div>
+  </p-header>
   <ng-template let-meme pTemplate="listItem">
     <div class="ui-g separator">
       <div class="ui-g-12 ui-md-3">
-        <div class="ui-g-12 ui-md-8 center" [innerHtml]="meme.embededLink"></div>
+        <div class="ui-g-12 ui-md-8 center" [innerHTML]="meme.embededLink"></div>
       </div>
       <div class="ui-g-12 ui-md-8">
         <div class="ui-g center">
@@ -14,9 +18,23 @@
           </h2>
         </div>
       </div>
-      <div class="ui-g-12 ui-md-1 icon">
+      <div class="ui-g-12 ui-md-1 icon" (click)="showEditDialog(meme)">
         <span class="mdi mdi-pencil mdi-36px"></span>
       </div>
     </div>
   </ng-template>
 </p-dataView>
+
+<p-dialog [draggable]="false" [modal]="true" [(visible)]="display" (onHide)="closeDialog()">
+  <p-header>
+    {{selectedMeme?.name}}
+  </p-header>
+  <app-create-edit-memes [meme]="selectedMeme" (success)="onSuccess()" [dialogMode]="selectedDialogMode"></app-create-edit-memes>
+  <p-footer>
+    <div style="display: flex; justify-content: space-between">
+      <button pButton type="button" label="Cancel" class="ui-button-secondary" (click)="closeDialog()"></button>
+      <button pButton type="button" label="Ok" class="ui-button-success" (click)="submitForm()"></button>
+    </div>
+  </p-footer>
+</p-dialog>
+

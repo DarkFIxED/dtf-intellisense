@@ -1,10 +1,13 @@
-import {RouterModule, Routes} from "@angular/router";
-import {NgModule} from "@angular/core";
-import {MemeListComponent} from "./components/meme-list/meme-list.component";
+import {RouterModule, Routes} from '@angular/router';
+import {NgModule} from '@angular/core';
+import {MemeListComponent} from './components/meme-list/meme-list.component';
 
 const routes: Routes = [{
   path: 'memes', component: MemeListComponent,
-}];
+  },
+  {
+    path: '', component: MemeListComponent,
+  }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

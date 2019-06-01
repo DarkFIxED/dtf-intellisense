@@ -1,12 +1,14 @@
-﻿using IntellisenseForMemes.BusinessLogic.Senders;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using IntellisenseForMemes.BusinessLogic.Senders;
 using IntellisenseForMemes.BusinessLogic.Senders.DtfSender;
 using IntellisenseForMemes.BusinessLogic.Services.Meme;
 using IntellisenseForMemes.BusinessLogic.Services.User;
 using IntellisenseForMemes.DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using NLog;
+using Microsoft.Extensions.Logging;
 using SimpleInjector;
 
 namespace IntellisenseForMemes.Api.AppHelpers
@@ -37,13 +39,17 @@ namespace IntellisenseForMemes.Api.AppHelpers
         {
             container.Register(typeof(IRepository<>), typeof(BaseRepository<>), Lifestyle.Scoped);
             container.Register(typeof(IRepository<,>), typeof(BaseRepository<,>), Lifestyle.Scoped);
-            //container.Register<IntellisenseDbContext, IntellisenseDbContext>(Lifestyle.Scoped);
             container.CrossWire<IntellisenseDbContext>(app);
-            //container.Register<IntellisenseDbContext>(() =>
-            //{
-            //    var options = new DbContextOptions<IntellisenseDbContext>();
-            //    return new IntellisenseDbContext(options);
-            //}, Lifestyle.Scoped);
+
+            container.RegisterConditional(
+                typeof(ILogger),
+                c => typeof(Logger<>).MakeGenericType(c.Consumer.ImplementationType),
+                Lifestyle.Singleton,
+                c => true);
+
+            // This next call is not required if you are already calling AutoCrossWireAspNetComponents
+            container.CrossWire<ILoggerFactory>(app);
+
             container.CrossWire<UserManager<Domain.User>>(app); 
             container.CrossWire<SignInManager<Domain.User>>(app);
         }

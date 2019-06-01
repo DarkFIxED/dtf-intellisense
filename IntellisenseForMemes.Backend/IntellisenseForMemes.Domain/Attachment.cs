@@ -1,4 +1,5 @@
-﻿using IntellisenseForMemes.Domain.Common;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using IntellisenseForMemes.Domain.Common;
 
 namespace IntellisenseForMemes.Domain
 {

@@ -21,3 +21,16 @@
 .separator{
   padding: 2em;border-bottom: 1px solid #d9d9d9
 }
+
+
+:host ::ng-deep {
+  .ui-dialog{
+    top: 150px!important;
+  }
+
+
+  img.meme-image {
+    max-height: 240px;
+    max-width: 360px;
+  }
+}
