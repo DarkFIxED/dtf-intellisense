@@ -20,7 +20,10 @@
 		"assets/tooltipster.bundle.min.js",
 		"assets/content.js"
 	  ],
-	  "css": ["assets/tooltipster.bundle.min.css"],
+	  "css": [
+		"assets/tooltipster.bundle.min.css",
+		"assets/customization.css"
+	  ],
 	  "run_at": "document_end"
 	}
   ],
