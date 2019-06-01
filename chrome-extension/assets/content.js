@@ -84,6 +84,8 @@ function processSymbolKey(target, keyboardEvent) {
 
     if (setToolTipContent(target, currentValue).hasRelevantMatches) {
         openToolTip(target);
+    }else {
+        closeToolTip(target);
     }
 }
 
