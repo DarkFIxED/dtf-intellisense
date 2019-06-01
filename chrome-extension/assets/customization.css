@@ -1,0 +1,27 @@
+#meme-select {
+    overflow: auto;
+    width: 100%;
+    background-color: inherit;
+    border: none;
+}
+#meme-select option:not(:checked) {
+    background-color: inherit;
+    color:inherit;
+}
+
+#meme-select option:checked {
+    background-color: inherit;
+    color:inherit;
+}
+
+#meme-select:focus > option:checked {
+    background: inherit !important;
+}
+
+.tooltipster-content {
+    padding: 1px !important;
+}
+
+#meme-select:active, #meme-select:hover {
+    outline: none
+}
