@@ -3,9 +3,9 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ApiResponse} from '../../models/api-response.model';
 import {Meme} from '../models/meme.model';
-import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
 import {MemeForm} from '../models/forms/meme.form';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
