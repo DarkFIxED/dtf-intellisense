@@ -1,0 +1,46 @@
+.first-input {
+  margin-top: 15px;
+}
+
+.controls {
+  max-width: 320px;
+
+  input {
+    width: 320px;
+  }
+
+  margin-bottom: 15px;
+
+  .red-line {
+    margin-left: 3px;
+  }
+}
+
+.types {
+  margin-bottom: 20px !important;
+}
+
+
+:host ::ng-deep {
+  .ui-chips {
+    .ui-inputtext {
+      max-width: 320px;
+      width: 320px;
+      margin-bottom: 15px;
+    }
+
+    .ui-chips-token {
+      margin: 2px !important;
+      padding-right: 15px !important;
+    }
+
+    .ui-chips-token-icon {
+      right: -3px !important;
+
+    }
+  }
+
+  .ui-radiobutton-label {
+    margin-right: 10px!important;
+  }
+}
