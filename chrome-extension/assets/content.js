@@ -3,40 +3,9 @@ const unobservedCommentsTextAreaSelector = "#page_wrapper .comments textarea.com
 const observedCommentsTextAreaSelector = "#page_wrapper .comments textarea.comments_form__textarea.meme-observed";
 const memeListId = "meme-select";
 const memeListSelector = "#meme-select";
+const serverUrl = "https://intellimemes.online/memes/search";
 
-const fakeData = JSON.parse("{  \n" +
-    "   \"isSuccess\":true,\n" +
-    "   \"data\":[  \n" +
-    "      {  \n" +
-    "         \"displayedName\":\"Rick Roll [2]\",\n" +
-    "         \"aliases\":[  \n" +
-    "            \"rick_roll\",\n" +
-    "            \"qgwg\"\n" +
-    "         ]\n" +
-    "      },\n" +
-    "      {  \n" +
-    "         \"displayedName\":\"Дудец\",\n" +
-    "         \"aliases\":[  \n" +
-    "            \"скелет с трубой\",\n" +
-    "            \"дудец\"\n" +
-    "         ]\n" +
-    "      },\n" +
-    "      {  \n" +
-    "         \"displayedName\":\"Hello World\",\n" +
-    "         \"aliases\":[  \n" +
-    "            \"hello_world\"\n" +
-    "         ]\n" +
-    "      },\n" +
-    "      {  \n" +
-    "         \"displayedName\":\"Нихуя не понял, но очень интересно\",\n" +
-    "         \"aliases\":[  \n" +
-    "            \"интересно\",\n" +
-    "            \"нихуя_не_понял\",\n" +
-    "            \"нихуя не понял\"\n" +
-    "         ]\n" +
-    "      }\n" +
-    "   ]\n" +
-    "}");
+let serverVocabulary = undefined;
 
 function buildContent(options) {
     if (options.length === 0) {
@@ -54,8 +23,16 @@ function buildContent(options) {
 }
 
 function findMatches(vocabulary, currentValue) {
-    let words = currentValue.split(" ");
     let matches = [];
+
+    if (!vocabulary) {
+        return {
+            matches: matches,
+            hasRelevantMatches: false
+        };
+    }
+
+    let words = currentValue.split(" ");
     let lastWord = words[words.length - 1];
 
     vocabulary
@@ -84,13 +61,13 @@ function processSymbolKey(target, keyboardEvent) {
 
     if (setToolTipContent(target, currentValue).hasRelevantMatches) {
         openToolTip(target);
-    }else {
+    } else {
         closeToolTip(target);
     }
 }
 
 function setToolTipContent(target, value) {
-    let matches = findMatches(fakeData.data, value);
+    let matches = findMatches(serverVocabulary, value);
     let content = buildContent(matches.matches);
     $(target).tooltipster('content', content);
 
@@ -277,6 +254,17 @@ function subscribeToDOMChange() {
     });
 }
 
+function loadPatterns() {
+    $.getJSON(serverUrl, function (response) {
+        if (!response.isSuccess) {
+            throw new Error("Server request fault");
+        }
+
+        serverVocabulary = response.data;
+    });
+}
+
 $(commentsContainerSelector).ready(function () {
     subscribeToDOMChange();
+    loadPatterns();
 });
