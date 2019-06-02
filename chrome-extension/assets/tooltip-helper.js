@@ -33,6 +33,7 @@ function setToolTIpValue(value) {
         let option = $(options[optionIndex]);
         if (option.attr('value') === value) {
             option.attr('selected', '');
+            option.get()[0].scrollIntoViewIfNeeded(false);
         } else {
             option.removeAttr('selected');
         }
