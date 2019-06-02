@@ -11,5 +11,6 @@ namespace IntellisenseForMemes.BusinessLogic.Services.Meme
         Task<int> CreateMeme(Domain.User creator, MemeModel meme);
         Task UpdateMeme(Domain.User modifier, MemeModel meme);
         Task<List<MemeBriefModel>> SearchMemes(string option);
+        Task<string> GetDtfAttachmentByMemeName(string memeName);
     }
 }

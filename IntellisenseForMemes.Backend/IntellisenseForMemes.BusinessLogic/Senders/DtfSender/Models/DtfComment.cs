@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace IntellisenseForMemes.BusinessLogic.Senders.DtfSender.Models
 {
@@ -14,6 +11,8 @@ namespace IntellisenseForMemes.BusinessLogic.Senders.DtfSender.Models
         public string Text { get; set; }
 
         public DtfUser Creator { get; set; } 
+
+        public DtfContent Content { get; set; } 
 
         [JsonProperty("replay_to")]
         public int ReplyTo { get; set; }
