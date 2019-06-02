@@ -16,12 +16,10 @@ import {DialogMods} from '../../../models/dialog-mods.enum';
 export class CreateEditMemesComponent implements OnInit, OnChanges {
 
   @Input() meme: Meme;
-
   @Input() dialogMode: DialogMods;
 
-
-  @Output()
-  success = new EventEmitter<any>();
+  @Output() success = new EventEmitter<any>();
+  @Output() loading = new EventEmitter<boolean>();
 
   form: MemeForm;
 
@@ -34,7 +32,6 @@ export class CreateEditMemesComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.meme) {
-      this.form = new MemeForm();
       this.fillForm();
     }
   }
@@ -44,9 +41,11 @@ export class CreateEditMemesComponent implements OnInit, OnChanges {
 
   submit(): boolean {
     if (!this.form.valid) {
-      console.log('form is bad');
+      console.log('form is invalid');
       return false;
     }
+
+    this.loading.emit(true);
 
     const oldAliases = this.form.aliases.value.filter(a => typeof (a) !== 'string');
     const newAliasStrings = this.form.aliases.value.filter(a => typeof (a) === 'string');
@@ -60,13 +59,19 @@ export class CreateEditMemesComponent implements OnInit, OnChanges {
 
     const memeObs = this.dialogMode === DialogMods.Edit ? this.memeService.updateMeme(this.form) : this.memeService.addMeme(this.form);
     memeObs.subscribe(() => {
-        console.log('form is good');
+        this.loading.emit(false);
         this.success.emit();
       },
-      (error) => console.log(error));
+      (error) => {
+        this.loading.emit(false);
+        console.log(error);
+      });
   }
 
   private fillForm() {
+    this.form = new MemeForm();
+    this.form.attachmentType.setValue(AttachmentTypes.Image);
+
     if (!this.meme) {
       return;
     }

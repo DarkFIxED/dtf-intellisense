@@ -13,7 +13,7 @@
   "content_scripts": [
 	{
 	  "matches": [
-		"https://dtf.ru/apitest/52620-test-memes-2"
+		"https://dtf.ru/*"
 	  ],
 	  "js": [
 		"assets/jquery-3.4.1.min.js",

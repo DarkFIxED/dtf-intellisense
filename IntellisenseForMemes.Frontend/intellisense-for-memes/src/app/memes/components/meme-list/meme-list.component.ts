@@ -20,6 +20,8 @@ export class MemeListComponent implements OnInit {
 
   @ViewChild(CreateEditMemesComponent) dialogView;
 
+  loading: boolean;
+
   constructor(public memeService: MemesHttpService, private embedService: EmbedVideoService) {
   }
 
@@ -30,6 +32,7 @@ export class MemeListComponent implements OnInit {
   showCreateDialog() {
     this.selectedDialogMode = DialogMods.Create;
     this.selectedMeme = undefined;
+    this.dialogView.fillForm();
     this.display = true;
   }
 
@@ -44,6 +47,11 @@ export class MemeListComponent implements OnInit {
     this.closeDialog();
   }
 
+
+  onLoading(loading: boolean) {
+    this.loading = loading;
+  }
+
   closeDialog() {
     this.display = false;
   }
@@ -56,6 +64,7 @@ export class MemeListComponent implements OnInit {
   }
 
   private initMemes() {
+    this.loading = true;
     this.memeService.getMemes().subscribe(memes => {
       this.memes = memes;
       this.memes.forEach(m => {
@@ -72,6 +81,10 @@ export class MemeListComponent implements OnInit {
             break;
         }
       });
-    });
+      this.loading = false;
+    }, (error => {
+      console.log(error);
+      this.loading = false;
+    }));
   }
 }
