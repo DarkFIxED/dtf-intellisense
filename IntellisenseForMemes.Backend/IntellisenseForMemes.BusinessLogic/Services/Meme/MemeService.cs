@@ -35,6 +35,18 @@ namespace IntellisenseForMemes.BusinessLogic.Services.Meme
             return memes;
         }
 
+        public async Task<string> GetDtfAttachmentByMemeName(string memeName)
+        {
+            var attachmentObject = await _memeRepository.AsQueryable()
+                .Include(m => m.Attachments)
+                .Include(m => m.Aliases)
+                .Where(m => m.Name == memeName || m.Aliases.Any(a => a.Alias == memeName))
+                .Select(m => m.Attachments.FirstOrDefault().ObjectFromDtfInJson)
+                .FirstOrDefaultAsync();
+
+            return attachmentObject;
+        }
+
         public async Task<List<MemeModel>> GetMemes()
         {
             var memes = await _memeRepository.AsQueryable()
@@ -124,10 +136,12 @@ namespace IntellisenseForMemes.BusinessLogic.Services.Meme
                 }
 
                 var dtfObject = await _dtfSender.UploadAttachment(dbAttachment.AttachmentUrl);
+                dbAttachment.UpdateObjectFromDtfInJson(dtfObject);
+
+                if (memeDb.Attachments.Count <= 1) continue;
 
                 // Delay because we can send only 3 request per second
                 await Task.Delay(350);
-                dbAttachment.UpdateObjectFromDtfInJson(dtfObject);
             }
 
             var newAliases = meme.Aliases.Select(a => new MemeAlias(a.Alias, memeDb) { Id = a.Id }).ToList();

@@ -1,9 +1,10 @@
 <h1 class="center"> Memes list </h1>
 
-<p-dataView [value]="memes" [paginator]="true" [rows]="10">
+<p-dataView #memeList [value]="memes" [paginator]="true" [rows]="3">
   <p-header>
-    <div style="display: flex; justify-content: flex-end;">
-      <button pButton type="button" label="Create new meme" class="ui-button-success" (click)="showCreateDialog()"></button>
+    <div style="display: flex; justify-content: space-between;">
+      <div>Meme count: {{ memeList.totalRecords }}</div>
+      <div><button pButton type="button" label="Create new meme" class="ui-button-success" (click)="showCreateDialog()"></button></div>
     </div>
   </p-header>
   <ng-template let-meme pTemplate="listItem">
@@ -23,13 +24,15 @@
       </div>
     </div>
   </ng-template>
+  <p-footer>
+  </p-footer>
 </p-dataView>
 
 <p-dialog [draggable]="false" [modal]="true" [(visible)]="display" (onHide)="closeDialog()">
   <p-header>
     {{selectedMeme?.name}}
   </p-header>
-  <app-create-edit-memes [meme]="selectedMeme" (success)="onSuccess()" [dialogMode]="selectedDialogMode"></app-create-edit-memes>
+  <app-create-edit-memes [meme]="selectedMeme" (success)="onSuccess()" (loading)="onLoading($event)" [dialogMode]="selectedDialogMode"></app-create-edit-memes>
   <p-footer>
     <div style="display: flex; justify-content: space-between">
       <button pButton type="button" label="Cancel" class="ui-button-secondary" (click)="closeDialog()"></button>
@@ -38,3 +41,6 @@
   </p-footer>
 </p-dialog>
 
+<div *ngIf="loading" class="loading">
+<p-progressSpinner ></p-progressSpinner>
+</div>
