@@ -3,19 +3,25 @@
     width: 100%;
     background-color: inherit;
     border: none;
+    max-width: 300px;
+    max-height: 106px;
 }
-#meme-select option:not(:checked) {
+
+.meme-item {
+    font-size: 14px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.meme-item:not([selected]) {
     background-color: inherit;
     color:inherit;
 }
 
-#meme-select option:checked {
-    background-color: inherit;
+.meme-item[selected] {
+    background-color: gray;
     color:inherit;
-}
-
-#meme-select:focus > option:checked {
-    background: inherit !important;
 }
 
 .tooltipster-content {

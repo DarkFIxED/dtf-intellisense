@@ -8,8 +8,7 @@
 	"default_popup": "popup.html"
   },
   "permissions": [
-	"activeTab",
-	"http://intellimemes.online/"
+	"activeTab"
   ],
   "content_scripts": [
 	{
@@ -19,6 +18,8 @@
 	  "js": [
 		"assets/jquery-3.4.1.min.js",
 		"assets/tooltipster.bundle.min.js",
+		"assets/textarea-helper.js",
+		"assets/tooltip-helper.js",
 		"assets/content.js"
 	  ],
 	  "css": [
