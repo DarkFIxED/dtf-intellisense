@@ -43,7 +43,7 @@ function findMatches(vocabulary, currentValue) {
         .map(entry => entry.aliases.map(alias => {
             matches.push({
                 alias: alias,
-                displayingName: entry.displayedName
+                displayingName: entry.displayingName
             });
         }));
 
@@ -228,6 +228,19 @@ function initializeToolTip(textArea) {
         contentCloning: true,
         trigger: "custom",
         contentAsHTML: true,
+        functionPosition: function(instance, helper, position){
+            position.side = "bottom";
+            position.distance = 0;
+
+            let caretCoords = getCaretCoordinates(textArea);
+            console.log(caretCoords);
+
+            position.coord.top = helper.geo.origin.windowOffset.top + caretCoords.top + 20;
+            position.coord.left = helper.geo.origin.windowOffset.left + caretCoords.left - 6;
+            position.target = caretCoords.left;
+
+            return position;
+        }
     });
 }
 
