@@ -1,10 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace IntellisenseForMemes.BusinessLogic.Senders.DtfSender.Models
 {
     public class DtfComment
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         public string Url { get; set; }
 
@@ -13,8 +14,5 @@ namespace IntellisenseForMemes.BusinessLogic.Senders.DtfSender.Models
         public DtfUser Creator { get; set; } 
 
         public DtfContent Content { get; set; } 
-
-        [JsonProperty("replay_to")]
-        public int ReplyTo { get; set; }
     }
 }

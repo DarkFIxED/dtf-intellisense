@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using IntellisenseForMemes.BusinessLogic.Senders.DtfSender.Models;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace IntellisenseForMemes.BusinessLogic.Senders.DtfSender
@@ -11,12 +12,16 @@ namespace IntellisenseForMemes.BusinessLogic.Senders.DtfSender
     {
         private readonly string _baseUrl = "https://api.dtf.ru/v1.6";
 
+        //TODO: Move this in settings
         private readonly string _accessToken = "cfb0df4b942759cac2432ee8e6ad3c753056312df443c3872717a4ce023f431d";
 
         private readonly Dictionary<string, string> _baseHeaders;
 
-        public DtfSender()
+        private readonly ILogger _logger;
+
+        public DtfSender(ILogger logger)
         {
+            _logger = logger;
             _baseHeaders = new Dictionary<string, string> { { "X-Device-Token", _accessToken } };
         }
 
@@ -49,7 +54,7 @@ namespace IntellisenseForMemes.BusinessLogic.Senders.DtfSender
 
             var requestParameters = new List<KeyValuePair<string, string>> {
                 new KeyValuePair<string,string>("id", articleId.ToString()),
-                new KeyValuePair<string,string>("replay_to", replyTo.ToString()),
+                new KeyValuePair<string,string>("reply_to", replyTo.ToString()),
                 new KeyValuePair<string,string>("text", text),
                 new KeyValuePair<string,string>("attachments", "[" + dtfAttachmentObject + "]")
             };

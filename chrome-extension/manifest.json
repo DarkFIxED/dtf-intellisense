@@ -1,8 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "DTF meme extension",
+  "name": "DTF meme extension [Beta]",
   "description": "Manage your memes on DTF",
-  "version": "1.0",
+  "version": "1.0.1",
+  "version_name": "1.0 beta",
   "browser_action": {
 	"default_icon": "assets/icon.png",
 	"default_popup": "popup.html"

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using IntellisenseForMemes.Api.AppHelpers;
 using IntellisenseForMemes.BusinessLogic.Senders.DtfSender;
 using IntellisenseForMemes.BusinessLogic.Senders.DtfSender.Models;
@@ -30,23 +31,31 @@ namespace IntellisenseForMemes.Api.Controllers
         [Route("webhooks/dtf/comments")]
         public async Task<IActionResult> NewComment(DtfRequestModel<DtfComment> comment)
         {
-            if (string.IsNullOrWhiteSpace(comment?.Data?.Text))
+            try
             {
+                if (comment == null || string.IsNullOrWhiteSpace(comment.Data?.Text) || comment.Data?.Content == null || comment.Data?.Content.Id.HasValue == false || comment.Data?.Id.HasValue == false)
+                {
+                    return new JsonResult(AjaxResponse.Success());
+                }
+
+                var memeName = DtfHelper.MemeNameFromComment(comment.Data.Text);
+                if (string.IsNullOrWhiteSpace(memeName))
+                {
+                    return new JsonResult(AjaxResponse.Success());
+                }
+
+                _logger.LogDebug($"User ask a meme with name {memeName} on comment with id {comment.Data.Id}");
+
+                var attachmentObject = await _memeService.GetDtfAttachmentByMemeName(memeName);
+                await _dtfSender.PostComment(comment.Data.Content.Id.Value, comment.Data.Id.Value, string.Empty, attachmentObject);
+
                 return new JsonResult(AjaxResponse.Success());
             }
-
-            var memeName = DtfHelper.MemeNameFromComment(comment.Data.Text);
-            if (string.IsNullOrWhiteSpace(memeName))
+            catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return new JsonResult(AjaxResponse.Success());
             }
-
-            _logger.LogDebug($"User ask a meme with name {memeName} on comment with id {comment.Data.ReplyTo}");
-
-            var attachmentObject = await _memeService.GetDtfAttachmentByMemeName(memeName);
-            await _dtfSender.PostComment(comment.Data.Content.Id, comment.Data.ReplyTo, string.Empty, attachmentObject);
-
-            return new JsonResult(AjaxResponse.Success());
         }
     }
 }

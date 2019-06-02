@@ -6,7 +6,7 @@ namespace IntellisenseForMemes.BusinessLogic.Senders.DtfSender.Models
 {
     public class DtfUser
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         public string Avatar { get; set; }
 
