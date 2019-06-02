@@ -20,7 +20,7 @@ export class MemeListComponent implements OnInit {
 
   @ViewChild(CreateEditMemesComponent) dialogView;
 
-  private loading: boolean;
+  loading: boolean;
 
   constructor(public memeService: MemesHttpService, private embedService: EmbedVideoService) {
   }
