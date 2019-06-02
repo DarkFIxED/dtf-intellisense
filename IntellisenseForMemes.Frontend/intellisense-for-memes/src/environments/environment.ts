@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://intellimemes.online/'
+  // apiUrl: 'http://localhost:52296/'
+  apiUrl: 'https://intellimemes.online/'
 };
 
 /*
