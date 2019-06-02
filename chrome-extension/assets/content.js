@@ -43,7 +43,7 @@ function findMatches(vocabulary, currentValue) {
         .map(entry => entry.aliases.map(alias => {
             matches.push({
                 alias: alias,
-                displayingName: entry.displayedName
+                displayingName: entry.displayingName
             });
         }));
 

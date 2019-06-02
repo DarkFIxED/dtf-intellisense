@@ -35,4 +35,10 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="robot.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

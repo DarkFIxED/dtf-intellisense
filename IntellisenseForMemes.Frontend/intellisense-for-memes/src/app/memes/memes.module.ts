@@ -3,7 +3,7 @@ import {MemeListComponent} from './components/meme-list/meme-list.component';
 import {MemesRoutes} from './memes.routes';
 import {CommonModule} from '@angular/common';
 import {DataViewModule} from 'primeng/dataview';
-import {ChipsModule, DropdownModule, InputTextModule, RadioButtonModule} from 'primeng/primeng';
+import {ChipsModule, DropdownModule, InputTextModule, ProgressSpinnerModule, RadioButtonModule} from 'primeng/primeng';
 import {EmbedVideo} from 'ngx-embed-video/dist';
 import {DialogModule} from 'primeng/dialog';
 import {ButtonModule} from 'primeng/button';
@@ -16,6 +16,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     CommonModule,
     DropdownModule,
     InputTextModule,
+    ProgressSpinnerModule,
     ReactiveFormsModule,
     FormsModule,
     ChipsModule,
