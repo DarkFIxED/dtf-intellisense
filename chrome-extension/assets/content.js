@@ -1,26 +1,9 @@
 const commentsContainerSelector = "#page_wrapper .comments";
 const unobservedCommentsTextAreaSelector = "#page_wrapper .comments textarea.comments_form__textarea:not(.meme-observed)";
 const observedCommentsTextAreaSelector = "#page_wrapper .comments textarea.comments_form__textarea.meme-observed";
-const memeListId = "meme-select";
-const memeListSelector = "#meme-select";
+
 const serverUrl = "https://intellimemes.online/memes/search";
-
 let serverVocabulary = undefined;
-
-function buildContent(options) {
-    if (options.length === 0) {
-        return `No matches found`;
-    }
-
-    // language=HTML
-    let result = `<select id="${memeListId}" size="5">`;
-    for (let option of options) {
-        result = result + `<option value="${option.alias}" ${options.indexOf(option) === 0 ? "selected" : ""}>${option.displayingName}&nbsp;(${option.alias})</option>`;
-    }
-
-    result = result + "</select>";
-    return result;
-}
 
 function findMatches(vocabulary, currentValue) {
     let matches = [];
@@ -64,69 +47,6 @@ function processSymbolKey(target, keyboardEvent) {
     } else {
         closeToolTip(target);
     }
-}
-
-function setToolTipContent(target, value) {
-    let matches = findMatches(serverVocabulary, value);
-    let content = buildContent(matches.matches);
-    $(target).tooltipster('content', content);
-
-    return {
-        hasRelevantMatches: matches.hasRelevantMatches,
-        optionsCount: content.length
-    };
-}
-
-function selectPrevMatch() {
-    let currentValue = $(memeListSelector).val();
-    let allValues = [];
-
-    let options = $(`${memeListSelector} option`);
-    options.each(option => {
-        allValues.push($(options[option]).attr('value'))
-    });
-
-    let currentIndex = allValues.indexOf(currentValue);
-    let newIndex = currentIndex === 0
-        ? allValues.length - 1
-        : currentIndex - 1;
-
-    let newValue = allValues[newIndex];
-    $(memeListSelector).val(newValue);
-}
-
-function selectNextMatch() {
-    let currentValue = $(memeListSelector).val();
-    let allValues = [];
-
-    let options = $(`${memeListSelector} option`);
-    options.each(option => {
-        allValues.push($(options[option]).attr('value'))
-    });
-
-    let currentIndex = allValues.indexOf(currentValue);
-    let newIndex = currentIndex === allValues.length - 1
-        ? 0
-        : currentIndex + 1;
-
-    let newValue = allValues[newIndex];
-    $(memeListSelector).val(newValue);
-}
-
-function insertCurrent(target) {
-    let currentValue = `\${${$(memeListSelector).val()}}`;
-    let targetValue = $(target).val();
-
-    let words = targetValue.split(" ");
-    if (words.length === 0) {
-        $(target).val(currentValue);
-        return;
-    }
-
-    let lastWord = words[words.length - 1];
-    let lastEntryPointIndex = targetValue.lastIndexOf(lastWord);
-    let newValue = targetValue.substr(0, lastEntryPointIndex).concat(currentValue);
-    $(target).val(newValue);
 }
 
 function processCommandKey(target, keyboardEvent) {
@@ -191,57 +111,6 @@ function initInputListener(e) {
             e.preventDefault();
         }
     }
-}
-
-function openToolTip(target) {
-    $(target).tooltipster('open');
-
-    $(memeListSelector).bind("keydown", function (event) {
-        if (event.originalEvent.keyCode === 13) {
-            insertCurrent(target);
-            closeToolTip(target);
-        }
-    });
-
-    $(memeListSelector).bind("dblclick", function (event) {
-        insertCurrent(target);
-        closeToolTip(target);
-    });
-
-    target['meme'].opened = true;
-}
-
-function closeToolTip(target) {
-    $(memeListSelector).unbind();
-    $(target).tooltipster('close');
-    target['meme'].opened = false;
-}
-
-function initializeToolTip(textArea) {
-    textArea['meme'] = {
-        opened: false
-    };
-
-    $(textArea).tooltipster({
-        interactive: true,
-        selfDestruction: false,
-        contentCloning: true,
-        trigger: "custom",
-        contentAsHTML: true,
-        functionPosition: function(instance, helper, position){
-            position.side = "bottom";
-            position.distance = 0;
-
-            let caretCoords = getCaretCoordinates(textArea);
-            console.log(caretCoords);
-
-            position.coord.top = helper.geo.origin.windowOffset.top + caretCoords.top + 20;
-            position.coord.left = helper.geo.origin.windowOffset.left + caretCoords.left - 6;
-            position.target = caretCoords.left;
-
-            return position;
-        }
-    });
 }
 
 function initializeEventListeners(target) {

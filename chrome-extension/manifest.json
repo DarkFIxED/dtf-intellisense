@@ -18,8 +18,9 @@
 	  "js": [
 		"assets/jquery-3.4.1.min.js",
 		"assets/tooltipster.bundle.min.js",
-		"assets/content.js",
-		"assets/textarea-helper.js"
+		"assets/textarea-helper.js",
+		"assets/tooltip-helper.js",
+		"assets/content.js"
 	  ],
 	  "css": [
 		"assets/tooltipster.bundle.min.css",
