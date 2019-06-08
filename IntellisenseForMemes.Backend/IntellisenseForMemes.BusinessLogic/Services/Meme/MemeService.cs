@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IntellisenseForMemes.BusinessLogic.Senders.DtfSender;
 using IntellisenseForMemes.BusinessLogic.Services.Meme.Models;
+using IntellisenseForMemes.Common.Extensions;
 using IntellisenseForMemes.DAL;
 using IntellisenseForMemes.Domain;
 using Microsoft.EntityFrameworkCore;
@@ -37,10 +38,12 @@ namespace IntellisenseForMemes.BusinessLogic.Services.Meme
 
         public async Task<string> GetDtfAttachmentByMemeName(string memeName)
         {
+            var normalizedString = memeName.NormalizeWords();
+
             var attachmentObject = await _memeRepository.AsQueryable()
                 .Include(m => m.Attachments)
                 .Include(m => m.Aliases)
-                .Where(m => m.Name == memeName || m.Aliases.Any(a => a.Alias == memeName))
+                .Where(m => normalizedString.Contains(m.NormalizedName) || m.Aliases.Any(a => normalizedString.Contains(a.NormalizedAlias)))
                 .Select(m => m.Attachments.FirstOrDefault().ObjectFromDtfInJson)
                 .FirstOrDefaultAsync();
 
@@ -107,6 +110,11 @@ namespace IntellisenseForMemes.BusinessLogic.Services.Meme
             {
                 var dtfObject = await _dtfSender.UploadAttachment(dbAttachment.AttachmentUrl);
                 dbAttachment.UpdateObjectFromDtfInJson(dtfObject);
+
+                if (newMeme.Attachments.Count <= 1) continue;
+
+                // Delay because we can send only 3 request per second
+                await Task.Delay(350);
             }
 
             newMeme.AddAlias(meme.Aliases.Select(a => new MemeAlias(a.Alias, newMeme)).ToList());
@@ -148,6 +156,17 @@ namespace IntellisenseForMemes.BusinessLogic.Services.Meme
             memeDb.UpdateAliases(modifier, newAliases);
 
             _memeRepository.Update(memeDb);
+            await _memeRepository.SaveAsync();
+        }
+
+        public async Task NormalizedMemes()
+        {
+            var memes = await _memeRepository.AsQueryable().Include(m => m.Aliases).ToListAsync();
+            foreach (var meme in memes)
+            {
+                meme.Normalize();
+            }
+
             await _memeRepository.SaveAsync();
         }
     }

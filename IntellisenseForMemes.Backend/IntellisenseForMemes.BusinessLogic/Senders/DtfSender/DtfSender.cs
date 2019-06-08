@@ -13,7 +13,7 @@ namespace IntellisenseForMemes.BusinessLogic.Senders.DtfSender
         private readonly string _baseUrl = "https://api.dtf.ru/v1.6";
 
         //TODO: Move this in settings
-        private readonly string _accessToken = "cfb0df4b942759cac2432ee8e6ad3c753056312df443c3872717a4ce023f431d";
+        private readonly string _accessToken = "42a241a144abbfb4f189e53d5f63ecabe759a6cff349ee8f3c96ec27096ce4cb";
 
         private readonly Dictionary<string, string> _baseHeaders;
 

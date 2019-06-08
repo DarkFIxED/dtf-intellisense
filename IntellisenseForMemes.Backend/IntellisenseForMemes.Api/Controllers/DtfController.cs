@@ -38,17 +38,13 @@ namespace IntellisenseForMemes.Api.Controllers
                     return new JsonResult(AjaxResponse.Success());
                 }
 
-                var memeName = DtfHelper.MemeNameFromComment(comment.Data.Text);
-                if (string.IsNullOrWhiteSpace(memeName))
+                if (comment.Data.Text.Length > 3000)
                 {
                     return new JsonResult(AjaxResponse.Success());
                 }
 
-                _logger.LogDebug($"User ask a meme with name {memeName} on comment with id {comment.Data.Id}");
-
-                var attachmentObject = await _memeService.GetDtfAttachmentByMemeName(memeName);
+                var attachmentObject = await _memeService.GetDtfAttachmentByMemeName(comment.Data.Text);
                 await _dtfSender.PostComment(comment.Data.Content.Id.Value, comment.Data.Id.Value, string.Empty, attachmentObject);
-
                 return new JsonResult(AjaxResponse.Success());
             }
             catch (Exception ex)

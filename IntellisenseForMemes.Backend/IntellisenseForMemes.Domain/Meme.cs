@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using IntellisenseForMemes.Common.Extensions;
 using IntellisenseForMemes.Domain.Common;
 
 namespace IntellisenseForMemes.Domain
@@ -14,9 +15,12 @@ namespace IntellisenseForMemes.Domain
         public Meme(User creator, string name) : base(creator)
         {
             Name = name;
+            NormalizedName = name.NormalizeWords();
         }
 
         public string Name { get; protected set; }
+
+        public string NormalizedName { get; protected set; }
 
         public virtual ICollection<MemeAlias> Aliases { get; set; }
 
@@ -31,6 +35,14 @@ namespace IntellisenseForMemes.Domain
             Attachments = attachments;
         }
 
+        public void Normalize()
+        {
+            NormalizedName = Name.NormalizeWords();
+            foreach (var alias in Aliases)
+            {
+                alias.NormalizedAlias = alias.Alias.NormalizeWords();
+            }
+        }
 
         public void AddAlias(List<MemeAlias> aliases)
         {
@@ -49,6 +61,7 @@ namespace IntellisenseForMemes.Domain
             }
 
             Name = name;
+            NormalizedName = name.NormalizeWords();
             UpdateMetadata(modifier);
         }
 

@@ -7,6 +7,7 @@ let serverVocabulary = undefined;
 
 function findMatches(vocabulary, currentValue) {
     let matches = [];
+    const checkedWordsCount = 5;
 
     if (!vocabulary) {
         return {
@@ -15,20 +16,39 @@ function findMatches(vocabulary, currentValue) {
         };
     }
 
-    let words = currentValue.split(" ");
-    let lastWord = words[words.length - 1];
+    currentValue = currentValue.toLowerCase();
 
+    let words = currentValue.match("[a-z0-9а-я]+");
+
+    let normilizedValue = words.join(" ");
+
+    let fakeWords = ['a', 'Дуа', 'c', 'd', 'e', 'f', 'дудец'];
+    // fakeWords = ['a', 'b', 'c'];
+    let lexemes = [];
+    let lexemesSet = "";
+    let leftBoundary =  fakeWords.length >= checkedWordsCount ? fakeWords.length - checkedWordsCount : 0;
+    for(let i = fakeWords.length; i > leftBoundary; i--) {
+
+        let b = fakeWords.slice(i - 1, fakeWords.length);
+        lexemesSet = b.join(" ");
+        lexemes.push(lexemesSet);
+    }
+
+    console.log(lexemes);
+
+    // let words = currentValue.split(" ");
+    // let lastWord = words[words.length - 1];
+    //
     vocabulary
         .filter(entry => words.length === 0
             ? true
-            : entry.aliases.some(alias => alias.search(lastWord) >= 0
-            ))
-        .map(entry => entry.aliases.map(alias => {
+            : entry.aliases.some(alias => lexemes.some(lexeme => alias.search(lexeme) >= 0))
+        )
+        .map(entry => {
             matches.push({
-                alias: alias,
+                alias: entry.aliases[0],
                 displayingName: entry.displayingName
-            });
-        }));
+        })});
 
     return {
         matches: matches,

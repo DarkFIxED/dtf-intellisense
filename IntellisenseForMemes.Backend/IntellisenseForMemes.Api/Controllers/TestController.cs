@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using IntellisenseForMemes.Api.AppHelpers;
 using IntellisenseForMemes.BusinessLogic.Senders.DtfSender;
+using IntellisenseForMemes.BusinessLogic.Services.Meme;
 using IntellisenseForMemes.DAL;
 using IntellisenseForMemes.Domain;
 using Microsoft.AspNetCore.Mvc;
@@ -19,23 +20,23 @@ namespace IntellisenseForMemes.Api.Controllers
 
         private readonly IRepository<Attachment> _attachmentRepository;
 
+        private readonly IMemeService _memeService;
+
         private readonly ILogger _logger;
 
-        public TestController(IDtfSender dtfSender, IRepository<Attachment> attachmentRepository, ILogger logger)
+        public TestController(IDtfSender dtfSender, IRepository<Attachment> attachmentRepository, ILogger logger, IMemeService memeService)
         {
             _dtfSender = dtfSender;
             _attachmentRepository = attachmentRepository;
             this._logger = logger;
+            _memeService = memeService;
         }
 
         [HttpGet]
         [Route("test")]
         public async Task<IActionResult> Test()
         {
-            //var a = await _attachmentRepository.AsQueryable().LastOrDefaultAsync();
-
-            //await _dtfSender.PostComment(51736, 0, "Best link ever with attachment", a.ObjectFromDtfInJson);
-
+            await _memeService.NormalizedMemes();
             return new JsonResult(AjaxResponse.Success());
         }
     }
