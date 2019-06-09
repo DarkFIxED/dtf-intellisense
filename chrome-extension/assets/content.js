@@ -5,9 +5,10 @@ const observedCommentsTextAreaSelector = "#page_wrapper .comments textarea.comme
 const serverUrl = "https://intellimemes.online/memes/search";
 let serverVocabulary = undefined;
 
+const wordsRegex = /[a-z0-9а-я]+/gm;
+
 function findMatches(vocabulary, currentValue) {
     let matches = [];
-    const checkedWordsCount = 5;
 
     if (!vocabulary) {
         return {
@@ -18,37 +19,30 @@ function findMatches(vocabulary, currentValue) {
 
     currentValue = currentValue.toLowerCase();
 
-    let words = currentValue.match("[a-z0-9а-я]+");
+    let words = currentValue.match(wordsRegex);
 
-    let normilizedValue = words.join(" ");
+    let lexemesStatements = [];
+    const maxLexemeStatementLength = 5;
 
-    let fakeWords = ['a', 'Дуа', 'c', 'd', 'e', 'f', 'дудец'];
-    // fakeWords = ['a', 'b', 'c'];
-    let lexemes = [];
-    let lexemesSet = "";
-    let leftBoundary =  fakeWords.length >= checkedWordsCount ? fakeWords.length - checkedWordsCount : 0;
-    for(let i = fakeWords.length; i > leftBoundary; i--) {
-
-        let b = fakeWords.slice(i - 1, fakeWords.length);
-        lexemesSet = b.join(" ");
-        lexemes.push(lexemesSet);
+    let deep = Math.max(0, words.length - maxLexemeStatementLength);
+    for (let i = words.length; i >= deep; i--) {
+        for (let j = 1; j <= Math.min(i, maxLexemeStatementLength); j++) {
+            let lexemeStatement = words.slice(i - j, i).join(" ");
+            lexemesStatements.push(lexemeStatement);
+        }
     }
 
-    console.log(lexemes);
-
-    // let words = currentValue.split(" ");
-    // let lastWord = words[words.length - 1];
-    //
     vocabulary
         .filter(entry => words.length === 0
             ? true
-            : entry.aliases.some(alias => lexemes.some(lexeme => alias.search(lexeme) >= 0))
+            : entry.aliases.some(alias => lexemesStatements.some(lexeme => alias.search(lexeme) >= 0))
         )
         .map(entry => {
             matches.push({
                 alias: entry.aliases[0],
                 displayingName: entry.displayingName
-        })});
+            })
+        });
 
     return {
         matches: matches,
